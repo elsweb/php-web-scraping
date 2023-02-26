@@ -17,15 +17,34 @@ if ($html !== false) {
     $paginationElements = $htmlDomParser->find(".page-numbers a"); 
     $paginationLinks = []; 
     foreach ($paginationElements as $paginationElement) { 
-        // populate the paginationLinks set with the URL 
-        // extracted from the href attribute of the HTML pagination element 
         $paginationLink = $paginationElement->getAttribute("href"); 
-        // avoid duplicates in the list of URLs 
         if (!in_array($paginationLink, $paginationLinks)) { 
             $paginationLinks[] = $paginationLink; 
         } 
     } 
-     
+    $highestPaginationNumber = preg_replace("/\D/", "", end($paginationLinks));
     // print the paginationLinks array 
-    print_r($paginationLinks);
+    
+
+    $productElements = $htmlDomParser->find("li.product"); 
+    foreach ($productElements as $productElement) { 
+        // extract the product data 
+        $url = $productElement->findOne("a")->getAttribute("href"); 
+        $image = $productElement->findOne("img")->getAttribute("src"); 
+        $name = $productElement->findOne("h2")->text; 
+        $price = $productElement->findOne(".price span")->text; 
+    
+        // transform the product data into an associative array 
+        $productData = array( 
+            "url" => $url, 
+            "image" => $image, 
+            "name" => $name, 
+            "price" => $price 
+        ); 
+    
+        $productDataList[] = $productData; 
+    }
+    echo "<pre>";
+        print_r($productDataList);
+    echo "</pre>";
 }
