@@ -5,7 +5,11 @@ use voku\helper\HtmlDomParser;
 
 //https://www.zenrows.com/blog/web-scraping-php#introduction
 
-$html = loopPage(link: 'https://scrapeme.live/shop/');
+$html = loopPage(
+    link: 'https://scrapeme.live/shop/', 
+    proxyHost: "179.107.52.84", 
+    proxyPort: "4153"
+);
 
 set_time_limit(0);
 
@@ -20,7 +24,8 @@ if ($html !== false) {
         } 
     } 
     $highestPaginationNumber = preg_replace("/\D/", "", end($paginationLinks));
-    
+    var_dump($highestPaginationNumber);
+    die;
     for ($i=1; $i<= (int)$highestPaginationNumber; $i++) {
         $link = $i == 1 ? 'https://scrapeme.live/shop/' : "https://scrapeme.live/shop/page/{$i}/";
         $html = loopPage(link: $link, sleep: rand(1, 5));
@@ -47,7 +52,7 @@ if ($html !== false) {
     echo "</pre>";
 }
 
-function loopPage($link = null, $sleep = null)
+function loopPage($link = null, $sleep = null, $proxyHost = null, $proxyPort = null)
 {
     if (!is_null($sleep)) {
         sleep($sleep);
@@ -59,6 +64,13 @@ function loopPage($link = null, $sleep = null)
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true); 
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36");
+        
+        if (!is_null($proxyHost) && !is_null($proxyPort)) {
+            curl_setopt($curl, CURLOPT_PROXY, "{$proxyHost}:{$proxyPort}");
+            curl_setopt($curl, CURLOPT_HEADER, 1);
+        }
+        
         $html = curl_exec($curl); 
         curl_close($curl); 
     }
