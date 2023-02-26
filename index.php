@@ -7,6 +7,8 @@ use voku\helper\HtmlDomParser;
 
 $html = loopPage(link: 'https://scrapeme.live/shop/');
 
+set_time_limit(0);
+
 if ($html !== false) {
     $htmlDomParser = HtmlDomParser::str_get_html($html);
     $paginationElements = $htmlDomParser->find(".page-numbers a"); 
@@ -23,37 +25,31 @@ if ($html !== false) {
         $link = $i == 1 ? 'https://scrapeme.live/shop/' : "https://scrapeme.live/shop/page/{$i}/";
         $html = loopPage(link: $link);
         if ($html !== false) {
-
+            $htmlDomParser = HtmlDomParser::str_get_html($html);
+            $productElements = $htmlDomParser->find("li.product"); 
+            foreach ($productElements as $productElement) { 
+                $url = $productElement->findOne("a")->getAttribute("href"); 
+                $image = $productElement->findOne("img")->getAttribute("src"); 
+                $name = $productElement->findOne("h2")->text; 
+                $price = $productElement->findOne(".price span")->text;
+                $productData = array( 
+                    "url" => $url, 
+                    "image" => $image, 
+                    "name" => $name, 
+                    "price" => $price 
+                );
+                $productDataList[] = $productData; 
+            }
         }
     }
+    echo "<pre>";
+        print_r($productDataList);
+    echo "</pre>";
 }
 
-
-// $productElements = $htmlDomParser->find("li.product"); 
-//     foreach ($productElements as $productElement) { 
-//         // extract the product data 
-//         $url = $productElement->findOne("a")->getAttribute("href"); 
-//         $image = $productElement->findOne("img")->getAttribute("src"); 
-//         $name = $productElement->findOne("h2")->text; 
-//         $price = $productElement->findOne(".price span")->text; 
-    
-//         // transform the product data into an associative array 
-//         $productData = array( 
-//             "url" => $url, 
-//             "image" => $image, 
-//             "name" => $name, 
-//             "price" => $price 
-//         ); 
-    
-//         $productDataList[] = $productData; 
-//     }
-//     echo "<pre>";
-//         print_r($productDataList);
-//         loopPage(sleep:2)
-//     echo "</pre>";
-
-function loopPage($link = null, $page = 1, $sleep = 1)
+function loopPage($link = null, $sleep = 1)
 {
+    sleep($sleep);
     if (!is_null($link)) {
         $curl = curl_init(); 
         curl_setopt($curl, CURLOPT_URL, $link); 
