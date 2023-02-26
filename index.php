@@ -12,8 +12,7 @@ curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
 $html = curl_exec($curl); 
 curl_close($curl); 
 
-var_dump($html);
- 
-// initialize HtmlDomParser 
-$htmlDomParser = HtmlDomParser::str_get_html('<b>a</b>');
-// var_dump($htmlDomParser);
+if ($html !== false) {
+    $htmlDomParser = HtmlDomParser::str_get_html($html);
+    var_dump($htmlDomParser);
+}
