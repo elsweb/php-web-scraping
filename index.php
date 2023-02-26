@@ -52,6 +52,13 @@ if ($html !== false) {
     echo "</pre>";
 }
 
+/** 
+ * Funcao de loopPage.
+ * 
+ * @param $page 
+ * 
+ * @param $sleep
+ */
 
 public function loopPage($page = 1, $sleep = 1)
 {
