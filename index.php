@@ -14,5 +14,18 @@ curl_close($curl);
 
 if ($html !== false) {
     $htmlDomParser = HtmlDomParser::str_get_html($html);
-    var_dump($htmlDomParser);
+    $paginationElements = $htmlDomParser->find(".page-numbers a"); 
+    $paginationLinks = []; 
+    foreach ($paginationElements as $paginationElement) { 
+        // populate the paginationLinks set with the URL 
+        // extracted from the href attribute of the HTML pagination element 
+        $paginationLink = $paginationElement->getAttribute("href"); 
+        // avoid duplicates in the list of URLs 
+        if (!in_array($paginationLink, $paginationLinks)) { 
+            $paginationLinks[] = $paginationLink; 
+        } 
+    } 
+     
+    // print the paginationLinks array 
+    print_r($paginationLinks);
 }
