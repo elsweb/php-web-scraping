@@ -5,10 +5,13 @@ use voku\helper\HtmlDomParser;
 
 //https://www.zenrows.com/blog/web-scraping-php#introduction
 
+//http://free-proxy.cz/en/proxylist/country/BR/all/date/all
+//https://hidemy.name/en/proxy-checker/
+
 $html = loopPage(
     link: 'https://scrapeme.live/shop/', 
-    proxyHost: "179.107.52.84", 
-    proxyPort: "4153"
+    proxyHost: "177.104.123.30", 
+    proxyPort: "5678"
 );
 
 set_time_limit(0);
