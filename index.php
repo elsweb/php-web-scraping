@@ -23,7 +23,7 @@ if ($html !== false) {
     
     for ($i=1; $i<= (int)$highestPaginationNumber; $i++) {
         $link = $i == 1 ? 'https://scrapeme.live/shop/' : "https://scrapeme.live/shop/page/{$i}/";
-        $html = loopPage(link: $link);
+        $html = loopPage(link: $link, sleep: rand(1, 5));
         if ($html !== false) {
             $htmlDomParser = HtmlDomParser::str_get_html($html);
             $productElements = $htmlDomParser->find("li.product"); 
@@ -47,9 +47,11 @@ if ($html !== false) {
     echo "</pre>";
 }
 
-function loopPage($link = null, $sleep = 1)
+function loopPage($link = null, $sleep = null)
 {
-    sleep($sleep);
+    if (!is_null($sleep)) {
+        sleep($sleep);
+    }
     if (!is_null($link)) {
         $curl = curl_init(); 
         curl_setopt($curl, CURLOPT_URL, $link); 
