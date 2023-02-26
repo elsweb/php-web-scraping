@@ -2,7 +2,9 @@
 require_once __DIR__ . "./vendor/autoload.php"; 
  
 use voku\helper\HtmlDomParser; 
- 
+
+//https://www.zenrows.com/blog/web-scraping-php#introduction
+
 $curl = curl_init(); 
 curl_setopt($curl, CURLOPT_URL, "https://scrapeme.live/shop/"); 
 curl_setopt($curl, CURLOPT_RETURNTRANSFER, true); 
@@ -46,5 +48,12 @@ if ($html !== false) {
     }
     echo "<pre>";
         print_r($productDataList);
+        loopPage(sleep:2)
     echo "</pre>";
+}
+
+
+public function loopPage($page = 1, $sleep = 1)
+{
+    sleep($sleep)
 }
